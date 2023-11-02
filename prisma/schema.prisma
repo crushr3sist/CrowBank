@@ -1,0 +1,94 @@
+model User {
+  id       String @id @default(uuid()) // Use auto-generated UUID
+  email    String @unique
+  username String
+  password String
+
+  // Use a more descriptive name for the relation
+  accounts Account[]
+
+  // Use a better name for the relation
+  mobileOTPSecrets MobileOTPSecret[]
+}
+
+model MobileOTPSecret {
+  // Use a more descriptive name for the field
+  secret String @id
+
+  // Use a more meaningful name for the relation
+  user User @relation(fields: [secret], references: [id])
+}
+
+model Account {
+  id           Int           @id @default(autoincrement()) // Use auto-incremented integer
+  userId       String        @unique // Use a more descriptive name
+  debitCards   Debit[]
+  creditCards  Credit[]
+  transactions Transaction[]
+
+  // Use a more meaningful name for the relation
+  user User? @relation(fields: [userId], references: [id])
+}
+
+model Debit {
+  id         Int         @id @default(autoincrement())
+  userId     String      @unique // Use a more descriptive name
+  pin        String      @unique
+  cardNumber String      @unique
+  cvv        String      @unique
+  balance    Float
+  savings    Float
+  incidences Incidence[]
+
+  // Use a more descriptive name for the relation
+  account   Account? @relation(fields: [accountId], references: [id])
+  accountId Int?
+}
+
+model Credit {
+  id           Int         @id @default(autoincrement())
+  userId       String      @unique // Use a more descriptive name
+  pin          String      @unique
+  cardNumber   String      @unique
+  cvv          String      @unique
+  deposit      Float
+  balanceInUse Float
+  incidences   Incidence[]
+
+  // Use a more descriptive name for the relation
+  account   Account? @relation(fields: [accountId], references: [id])
+  accountId Int?
+}
+
+model Incidence {
+  id              String @id @default(uuid()) // Use a more descriptive name and UUID
+  creditId        Int? // Use a more descriptive name
+  debitId         Int? // Use a more descriptive name
+  message         String
+  dateOfIncidence String
+
+  // Use more descriptive names for relations
+  credit Credit? @relation(fields: [creditId], references: [id])
+  debit  Debit?  @relation(fields: [debitId], references: [id])
+}
+
+model Transaction {
+  id                String @id @default(uuid()) // Use a more descriptive name and UUID
+  amountTransacted  Float
+  senderId          Int?
+  receiver          String
+  dateOfTransaction String
+  feesApplied       Float
+
+  // Use more descriptive names for relations
+  sender Account? @relation(fields: [senderId], references: [id])
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // uses connection pooling
+}
