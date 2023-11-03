@@ -14,7 +14,13 @@ import axios from "axios";
 
 const LoginPage = () => {
   const [qrCode, setQrCode] = useState("");
-  const [satisfedPassword, setSatisfiedPassword] = useState(false);
+  const [satisfiedPassword, setSatisfiedPassword] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const variation: string[] = ["success", "warning", "danger", "default"];
+  const [passwordVariationIndex, setPasswordVariationIndex] = useState(
+    variation.length,
+  );
 
   const fetchOTPQrCode = () => {
     axios
@@ -28,10 +34,13 @@ const LoginPage = () => {
   const passwordRulesEnforcer = (password: string) => {
     const passwordRegex =
       /^(?=(.*[A-Z]){2,})(?=.*[!@#$%^&*])[A-Za-z!@#$%^&*]{12}$/;
-    if (passwordRegex.test(password)) {
-      setSatisfiedPassword(true);
+    setSatisfiedPassword(passwordRegex.test(password));
+
+    // Update the password input field color here
+    if (password === "") {
+      setPasswordVariationIndex(variation.length);
     } else {
-      return;
+      setPasswordVariationIndex(satisfiedPassword ? 0 : 2);
     }
   };
 
@@ -50,7 +59,6 @@ const LoginPage = () => {
           <CardHeader className="flex w-full flex-row items-center justify-center uppercase">
             <h4 className="font-logo font-black text-4xl mt-4">Login</h4>
           </CardHeader>
-          {/* make this margin to middle out */}
           <div className="flex flex-row items-center justify-center">
             <CardBody className="mb-10 ">
               <div className="flex flex-row">
@@ -77,6 +85,11 @@ const LoginPage = () => {
                     label="Password"
                     variant="bordered"
                     type="password"
+                    color={variation[passwordVariationIndex]}
+                    onValueChange={(value) => {
+                      setPassword(value);
+                      passwordRulesEnforcer(value);
+                    }}
                   ></Input>
                   <Button className="mt-2">Sign Up</Button>
                 </div>
