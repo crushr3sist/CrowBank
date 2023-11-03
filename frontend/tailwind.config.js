@@ -12,11 +12,7 @@ export default {
     global: {},
   },
   theme: {
-    extend: {
-      colors: {
-        "main-theme-yellow": "#fde68a",
-      },
-    },
+    extend: {},
     fontFamily: {
       logo: ["Agrandir"],
     },
