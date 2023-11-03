@@ -62,9 +62,7 @@ users_router.post("/register", async (req, res) => {
 			return;
 		} else {
 			const secret = speakeasy.generateSecret();
-
 			const user = await Register.register(req.body, secret.base32);
-
 			console.log(user);
 			await db.prisma.$disconnect();
 			res.status(200).send("Registration successful");

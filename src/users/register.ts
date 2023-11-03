@@ -35,7 +35,6 @@ namespace Register {
 					mobileOTPSecrets: true,
 				},
 			});
-
 			return createdUser;
 		} catch (err) {
 			return err;
