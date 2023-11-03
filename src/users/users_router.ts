@@ -5,7 +5,6 @@ import { IAuth, IUser } from "./interfaces";
 import db from "../db";
 import speakeasy from "speakeasy";
 import QRCode from "qrcode";
-import { write } from "fs";
 const users_router = express.Router();
 
 users_router.post("/refresh", async (req, res) => {
@@ -65,7 +64,10 @@ users_router.post("/register", async (req, res) => {
 			const user = await Register.register(req.body, secret.base32);
 			console.log(user);
 			await db.prisma.$disconnect();
-			res.status(200).send("Registration successful");
+			const token = await Authentication.create_token(req.body);
+			res
+				.status(200)
+				.send({ message: "Registration successful", access_token: token });
 		}
 	} catch (error) {
 		console.error("Error during registration:", error.message);

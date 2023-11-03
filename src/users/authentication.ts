@@ -2,19 +2,25 @@ import db from "../db";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
 import { IAuth, IRecord } from "./interfaces";
+import bcrypt from "bcrypt"; // Import bcrypt
 
 namespace Authentication {
-	export async function check_if_user_exists(user: IAuth): Promise<any>;
-	export async function check_if_user_exists(user: {
-		username: IAuth["username"];
-	}): Promise<any>;
-	export async function check_if_user_exists(user: any): Promise<any> {
-		return db.prisma.user.findFirst({
+	export async function check_if_user_exists(user: IAuth): Promise<any> {
+		const foundUser = await db.prisma.user.findFirst({
 			where: {
 				username: user.username,
-				password: user.password,
 			},
 		});
+
+		if (foundUser) {
+			const passwordMatches = await bcrypt.compare(
+				user.password,
+				foundUser.password,
+			); // Compare hashed passwords
+			return passwordMatches ? foundUser : null;
+		}
+
+		return null;
 	}
 
 	export const get_user = async (
@@ -60,9 +66,13 @@ namespace Authentication {
 	): Promise<string | undefined> => {
 		try {
 			const _user = await check_if_user_exists(user);
-			return jwt.sign({ user: _user }, process.env.ACCESS_SECRET!, {
-				expiresIn: createExpire(),
-			});
+			if (_user) {
+				return jwt.sign({ user: _user }, process.env.ACCESS_SECRET!, {
+					expiresIn: createExpire(),
+				});
+			} else {
+				throw new Error("Invalid credentials");
+			}
 		} catch (err) {
 			return err;
 		}
@@ -79,11 +89,16 @@ namespace Authentication {
 
 			const _user = await check_if_user_exists({
 				username: tokenDecoded.username,
+				password: tokenDecoded.password, // Include password to verify
 			});
 
-			return jwt.sign({ user: _user }, process.env.ACCESS_SECRET!, {
-				expiresIn: createExpire(),
-			});
+			if (_user) {
+				return jwt.sign({ user: _user }, process.env.ACCESS_SECRET!, {
+					expiresIn: createExpire(),
+				});
+			} else {
+				throw new Error("Invalid credentials");
+			}
 		} catch (err) {
 			return err;
 		}

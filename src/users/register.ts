@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import db from "../db";
 import { IUser } from "./interfaces";
+import bcrypt from "bcrypt";
 
 namespace Register {
 	export async function getUserId(user: IUser): Promise<IUser> {
@@ -16,13 +17,15 @@ namespace Register {
 	}
 
 	export async function register(user: IUser, secret: string) {
+		const hashedPassword = await bcrypt.hash(user.password, 10); // Hash the password with a salt factor of 10
+
 		try {
 			let createdUser: IUser;
 			createdUser = await db.prisma.user.create({
 				data: {
 					username: user.username,
 					email: user.email,
-					password: user.password,
+					password: hashedPassword,
 					mobileOTPSecrets: {
 						create: [
 							{
