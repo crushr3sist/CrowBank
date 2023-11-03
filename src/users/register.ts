@@ -17,7 +17,8 @@ namespace Register {
 
 	export async function register(user: IUser, secret: string) {
 		try {
-			const createdUser = await db.prisma.user.create({
+			let createdUser: IUser;
+			createdUser = await db.prisma.user.create({
 				data: {
 					username: user.username,
 					email: user.email,
@@ -29,6 +30,9 @@ namespace Register {
 							},
 						],
 					},
+				},
+				include: {
+					mobileOTPSecrets: true,
 				},
 			});
 

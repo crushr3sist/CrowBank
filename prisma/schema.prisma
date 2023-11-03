@@ -12,11 +12,12 @@ model User {
 }
 
 model MobileOTPSecret {
-  // Use a more descriptive name for the field
-  secret String @id
+  id     String @id @default(uuid())
+  secret String
+  userId String
 
   // Use a more meaningful name for the relation
-  user User @relation(fields: [secret], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Account {
