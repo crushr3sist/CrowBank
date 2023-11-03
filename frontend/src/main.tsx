@@ -8,6 +8,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import ThemeProvider from "./components/themeProvider";
 import LoginPage from "./pages/auth/Login";
 import AuthProvider from "./components/AuthProvider";
+import RegisterPage from "./pages/auth/Register";
 
 declare global {
   interface Window {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
         ProtectedPage={<ThemeProvider MainPage={<IndexPage />}></ThemeProvider>}
       />
     ),
+  },
+  {
+    path: "/auth/register",
+    element: <RegisterPage />,
   },
   {
     path: "/auth/login",
