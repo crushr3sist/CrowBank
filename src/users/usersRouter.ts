@@ -5,9 +5,9 @@ import { IAuth, IUser } from "./interfaces";
 import db from "../db";
 import speakeasy from "speakeasy";
 import QRCode from "qrcode";
-const users_router = express.Router();
+const usersRouter = express.Router();
 
-users_router.post("/refresh", async (req, res) => {
+usersRouter.post("/refresh", async (req, res) => {
 	try {
 		const token = await Authentication.refreshToken(req.body.token);
 		res.status(200).send({ access_token: token });
@@ -17,7 +17,7 @@ users_router.post("/refresh", async (req, res) => {
 	}
 });
 
-users_router.post("/", async (req, res) => {
+usersRouter.post("/", async (req, res) => {
 	try {
 		const user = await Authentication.get_user_record(req.body.token);
 		res.status(200).send({ user });
@@ -27,7 +27,7 @@ users_router.post("/", async (req, res) => {
 	}
 });
 
-users_router.post("/login", async (req, res) => {
+usersRouter.post("/login", async (req, res) => {
 	try {
 		if (!(req.body as IAuth)) {
 			console.log(req.body);
@@ -48,7 +48,7 @@ users_router.post("/login", async (req, res) => {
 	}
 });
 
-users_router.post("/register", async (req, res) => {
+usersRouter.post("/register", async (req, res) => {
 	try {
 		if (!(req.body as IUser)) {
 			console.log(req.body);
@@ -75,7 +75,7 @@ users_router.post("/register", async (req, res) => {
 	}
 });
 
-users_router.get("/otp/mobile/generate", async (req, res) => {
+usersRouter.get("/otp/mobile/generate", async (req, res) => {
 	const secretKey = speakeasy.generateSecret();
 
 	const url = speakeasy.otpauthURL({
@@ -94,7 +94,7 @@ users_router.get("/otp/mobile/generate", async (req, res) => {
 	});
 });
 
-users_router.get("/check", async (req, res) => {
+usersRouter.get("/check", async (req, res) => {
 	try {
 		if (!(req.body as IAuth)) {
 			console.log(req.body);
@@ -114,7 +114,7 @@ users_router.get("/check", async (req, res) => {
 	}
 });
 
-users_router.post("/otp/mobile/verify", async (req, res) => {
+usersRouter.post("/otp/mobile/verify", async (req, res) => {
 	const userOTPData = req.body;
 	try {
 		const otpAuth = await Authentication.verifyOTP(
@@ -129,4 +129,4 @@ users_router.post("/otp/mobile/verify", async (req, res) => {
 	}
 });
 
-export default users_router;
+export default usersRouter;
