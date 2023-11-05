@@ -25,6 +25,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [secret, setSecret] = useState("");
 
   const fetchOTPQrCode = () => {
     axios
@@ -32,6 +33,7 @@ const RegisterPage = () => {
       .then(async (request) => {
         await setQrCode(request.data.otp_qr_code);
         await localStorage.setItem("qrcode", request.data.otp_qr_code);
+        await setSecret(request.data.secretKey);
       });
   };
 
@@ -52,6 +54,7 @@ const RegisterPage = () => {
       email: email,
       username: username,
       password: password,
+      secret: secret,
     });
     const config = {
       method: "post",

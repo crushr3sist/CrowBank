@@ -60,8 +60,7 @@ users_router.post("/register", async (req, res) => {
 			res.status(500).send(`Error during registration: User Already Exists`);
 			return;
 		} else {
-			const secret = speakeasy.generateSecret();
-			const user = await Register.register(req.body, secret.base32);
+			const user = await Register.register(req.body, req.body.secret);
 			console.log(user);
 			await db.prisma.$disconnect();
 			const token = await Authentication.create_token(req.body);
@@ -78,19 +77,56 @@ users_router.post("/register", async (req, res) => {
 
 users_router.get("/otp/mobile/generate", async (req, res) => {
 	const secretKey = speakeasy.generateSecret();
-	// @ts-expect-error
-	QRCode.toDataURL(secretKey.otpauth_url, (err, data_url) => {
+
+	const url = speakeasy.otpauthURL({
+		secret: secretKey.base32,
+		label: "CrowBank",
+		encoding: "base32",
+		issuer: "CrowBank inc.ltd",
+	});
+
+	// @ts-ignore
+	QRCode.toDataURL(url, (err, data_url) => {
 		console.log(data_url);
-		res.status(200).send({ secretKey, otp_qr_code: data_url });
+		res
+			.status(200)
+			.send({ secretKey: secretKey.base32, otp_qr_code: data_url });
 	});
 });
 
-users_router.get("/otp/mobile/verify", async (req, res) => {
-	// @ts-expect-error
-	QRCode.toDataURL(secretKey.otpauth_url, (err, data_url) => {
-		console.log(data_url);
-		res.status(200).send({ otp_qr_code: data_url });
-	});
+users_router.get("/check", async (req, res) => {
+	try {
+		if (!(req.body as IAuth)) {
+			console.log(req.body);
+			res.status(500).send(`Error during check: incorrect data sent`);
+			return;
+		}
+		if (!(await Register.getUserId(req.body))) {
+			console.log(req.body);
+			res.status(500).send(`Error during check: wrong credidentials`);
+			return;
+		} else {
+			res.status(200).send("user found");
+		}
+	} catch (error) {
+		console.error("Error with login:", error.message);
+		res.status(500).send(`Error with login ${error.message}`);
+	}
+});
+
+users_router.post("/otp/mobile/verify", async (req, res) => {
+	const userOTPData = req.body;
+	try {
+		const otpAuth = await Authentication.verifyOTP(
+			userOTPData.creds,
+			userOTPData.otp,
+		);
+		res
+			.status(200)
+			.send({ message: "successful authentication", access_token: otpAuth });
+	} catch (e) {
+		res.status(500).send("error with otp");
+	}
 });
 
 export default users_router;

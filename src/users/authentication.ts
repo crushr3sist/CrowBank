@@ -3,12 +3,13 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
 import { IAuth, IRecord } from "./interfaces";
 import bcrypt from "bcrypt"; // Import bcrypt
-
+import speakeasy from "speakeasy";
+import Register from "./register";
 namespace Authentication {
 	export async function check_if_user_exists(user: IAuth): Promise<any> {
 		const foundUser = await db.prisma.user.findFirst({
 			where: {
-				username: user.username,
+				email: user.email,
 			},
 		});
 
@@ -22,6 +23,50 @@ namespace Authentication {
 
 		return null;
 	}
+
+	export const verifyOTP = async (user: IAuth, userOTPEntry: string) => {
+		try {
+			// Find the user by their email
+			const userRecord = await db.prisma.user.findFirst({
+				where: {
+					email: user.email,
+				},
+			});
+			console.log(userRecord);
+
+			if (!userRecord) {
+				throw new Error("User not found");
+			}
+
+			// Find the corresponding mobile OTP secret
+			const mobileOTPSecret = await db.prisma.mobileOTPSecret.findFirst({
+				where: {
+					userId: userRecord.id,
+				},
+			});
+			console.log(mobileOTPSecret);
+
+			if (!mobileOTPSecret) {
+				throw new Error("Mobile OTP secret not found");
+			}
+			console.log(userOTPEntry);
+
+			// Verify the OTP
+			const verified = speakeasy.totp.verify({
+				secret: mobileOTPSecret.secret,
+				encoding: "base32",
+				token: userOTPEntry,
+			});
+
+			if (verified) {
+				return create_token(user);
+			} else {
+				throw new Error("OTP verification failed");
+			}
+		} catch (error) {
+			return error.message;
+		}
+	};
 
 	export const get_user = async (
 		token: string,
@@ -88,7 +133,7 @@ namespace Authentication {
 			}
 
 			const _user = await check_if_user_exists({
-				username: tokenDecoded.username,
+				email: tokenDecoded.email,
 				password: tokenDecoded.password, // Include password to verify
 			});
 
