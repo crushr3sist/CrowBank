@@ -7,7 +7,7 @@ import usersRouter from "./users/usersRouter";
 import compression from "compression";
 import { constants } from "zlib";
 import * as zlib from "zlib";
-import accountRouter from "./accounts/accounts";
+import accountRouter from "./accounts/acountsRouter";
 import creditRouter from "./accounts/credit/creditRouter";
 import debitRouter from "./accounts/debit/debitRouter";
 import incidentsRouter from "./accounts/incidences/incidentRouter";
