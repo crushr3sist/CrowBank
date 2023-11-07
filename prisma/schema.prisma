@@ -1,11 +1,13 @@
 model User {
-  id       String @id @default(uuid()) // Use auto-generated UUID
-  email    String @unique
-  username String
-  password String
-
+  id        String    @id @default(uuid()) // Use auto-generated UUID
+  email     String    @unique
+  username  String
+  password  String
+  firstName String
+  lastName  String
+  address   String
   // Use a more descriptive name for the relation
-  accounts Account[]
+  accounts  Account[]
 
   // Use a better name for the relation
   mobileOTPSecrets MobileOTPSecret[]
@@ -32,14 +34,18 @@ model Account {
 }
 
 model Debit {
-  id         Int         @id @default(autoincrement())
-  userId     String      @unique // Use a more descriptive name
-  pin        String      @unique
-  cardNumber String      @unique
-  cvv        String      @unique
-  balance    Float
-  savings    Float
-  incidences Incidence[]
+  id             Int         @id @default(autoincrement())
+  userId         String      @unique // Use a more descriptive name
+  ATMPin         String      @unique
+  CardNumber     String      @unique
+  CVV            String      @unique
+  CardType       String
+  CardIssuedDate String
+  CardExpiryDate String
+  CardHolderName String
+  balance        Float
+  savings        Float
+  incidences     Incidence[]
 
   // Use a more descriptive name for the relation
   account   Account? @relation(fields: [accountId], references: [id])

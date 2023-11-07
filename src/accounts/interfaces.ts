@@ -9,3 +9,7 @@ export interface ICardUserSpecific extends ICard {
 	CardHolderName: string; // john doe
 	ATMPin: number;
 }
+export interface ICardComplete extends ICardUserSpecific {
+	balance: number;
+	savings: number;
+}
