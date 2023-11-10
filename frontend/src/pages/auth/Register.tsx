@@ -57,65 +57,67 @@ const RegisterPage = () => {
     }
   };
 
-  const registerUserRequest = () => {
-    if (
-      creds.some((element) => {
-        return element === "" || element === null;
-      })
-    ) {
-      return;
-    } else {
-      const data = qs.stringify({
-        email: email,
-        username: username,
-        password: password,
-        address: address,
-        firstName: firstName,
-        lastName: lastName,
-        secret: secret,
-      });
-      const config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: "http://localhost:8000/users/register",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        data: data,
-      };
-      axios.request(config).then(async (response) => {
-        localStorage.setItem("token", response.data.access_token);
-        navigate("/");
-      });
-    }
+  const registerUserRequest = async () => {
+    const data = qs.stringify({
+      email: email,
+      username: username,
+      password: password,
+      address: address,
+      firstName: firstName,
+      lastName: lastName,
+      secret: secret,
+    });
+    const config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8000/users/register",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: data,
+    };
+    console.log(config);
+    await axios.request(config).then(async (response) => {
+      localStorage.setItem("token", response.data.access_token);
+      navigate("/");
+    });
   };
 
   useEffect(() => {
-    if (localStorage.getItem("qrcode") === null) {
-      fetchOTPQrCode();
-    } else {
-      setQrCode(localStorage.getItem("qrcode"));
-    }
+    fetchOTPQrCode();
   }, []);
 
   const errorAlert = () => {
     if (phaseOneFormError) {
       return (
-        <>
-          <div className="bg-red-500 flex flex-row w-1/2 rounded-b-lg p-2 absolute translate-x-1/2 mt-1 border-s-red-200 border-spacing-1 ">
-            <p className="text-white flex-grow ">
+        <div
+          className={`
+          bg-red-500 
+          flex 
+          flex-row 
+          w-1/2 
+          rounded-b-lg 
+          p-2 absolute 
+          translate-x-1/2 
+          mt-1 
+          border-s-red-200 
+          border-spacing-1 
+          `}
+        >
+          <div className="p-2 mx-auto">
+            <p className="text-white flex-grow">
               Error: Please fill the form correctly
             </p>
-            <Button
-              className="p-2"
-              isIconOnly
-              aria-label="close"
-              onClick={() => setPhaseOneFormError(false)}
-            >
-              {crossIcon()}
-            </Button>
           </div>
-        </>
+          <Button
+            className="p-2"
+            isIconOnly
+            aria-label="close"
+            onClick={() => setPhaseOneFormError(false)}
+          >
+            {crossIcon()}
+          </Button>
+        </div>
       );
     }
   };
@@ -123,10 +125,10 @@ const RegisterPage = () => {
   return (
     <>
       <div className="absolute h-screen w-screen bg-gradient-to-r from-[#eee3c1] to-[#f8fafc] ">
-        <div className="animate-bounce">{errorAlert()}</div>
+        <div>{errorAlert()}</div>
         <div className="relative flex flex-col justify-center items-center mt-44 sm:mt-33 ">
           <Card className="w-1/2 h-1/2">
-            <CardHeader className="flex w-full flex-row items-center justify-center uppercase">
+            <CardHeader className="flex w-full flex-row flex-grow items-center justify-center uppercase">
               <h4 className="font-logo font-black text-4xl mt-4">Sign Up</h4>
             </CardHeader>
             <div className="flex flex-row items-center justify-center">
@@ -191,24 +193,26 @@ const RegisterPage = () => {
                           className="mt-2 shadow-md"
                           size="md"
                           label="Address"
+                          value={address}
                           variant="bordered"
-                          onValueChange={(value) => setAddress(value)}
+                          onValueChange={(Address) => setAddress(Address)}
                         ></Input>
                         <Input
                           className="mt-2 shadow-md"
                           size="md"
+                          value={firstName}
                           label="First Name"
                           variant="bordered"
-                          onValueChange={(value) => setFirstName(value)}
+                          onValueChange={(FirstName) => setFirstName(FirstName)}
                         ></Input>
                         <Input
                           className="mt-2 shadow-md"
                           size="md"
                           label="Last Name"
                           variant="bordered"
-                          type="password"
-                          onValueChange={(value) => {
-                            setLastName(value);
+                          value={lastName}
+                          onValueChange={(LastName) => {
+                            setLastName(LastName);
                           }}
                         ></Input>
                         <Button
