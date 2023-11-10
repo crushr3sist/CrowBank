@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-import crossIcon from "../../components/crossIcon";
+import crossIcon from "../../components/icons/crossIcon";
 
 const RegisterPage = () => {
   const [qrCode, setQrCode] = useState("");
@@ -21,7 +21,7 @@ const RegisterPage = () => {
 
   const variation: string[] = ["success", "warning", "danger", "default"];
   const [passwordVariationIndex, setPasswordVariationIndex] = useState(
-    variation.length,
+    variation.length
   );
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
@@ -33,7 +33,6 @@ const RegisterPage = () => {
   const [secret, setSecret] = useState("");
   const [phaseOneFormError, setPhaseOneFormError] = useState(false);
   const [firstPhase, setFirstPhase] = useState(true);
-  const creds = [password, username, email, address, firstName, lastName];
 
   const fetchOTPQrCode = () => {
     axios

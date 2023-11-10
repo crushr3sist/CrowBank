@@ -11,8 +11,9 @@ import {
   Switch,
 } from "@nextui-org/react";
 
-import { MoonIcon } from "./MoonIcon";
-import { SunIcon } from "./SunIcon";
+import { MoonIcon } from "./icons/MoonIcon";
+import { SunIcon } from "./icons/SunIcon";
+
 import useDarkMode from "use-dark-mode";
 
 export default function NavBar() {
@@ -20,8 +21,8 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
-  
-  const darkMode = useDarkMode(false);
+
+  const darkMode = useDarkMode(true);
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -30,10 +31,9 @@ export default function NavBar() {
 
   return (
     <Navbar
-    className=
-        {`${
-          darkMode.value ? "dark" : ""
-        } text-foreground bg-background`}
+      className={`${
+        darkMode.value ? "dark" : ""
+      } text-foreground bg-background`}
       isBordered
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}

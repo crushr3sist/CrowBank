@@ -1,16 +1,7 @@
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Input,
-  Image,
-  Button,
-  Divider,
-} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Input, Button } from "@nextui-org/react";
 
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import qs from "qs";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
@@ -120,7 +111,7 @@ const LoginPage = () => {
     const handleKeyNavigation = (e) => {
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         const currentIndex = OTPInputRefs.findIndex(
-          (ref) => ref.current === document.activeElement,
+          (ref) => ref.current === document.activeElement
         );
         if (currentIndex !== -1) {
           if (e.key === "ArrowLeft" && currentIndex > 0) {

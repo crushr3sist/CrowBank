@@ -1,8 +1,9 @@
 import useDarkMode from "use-dark-mode";
-import NavBar from "../components/navbar";
+import NavBar from "../navbar";
 
-const ThemeProvider = ({ TargetPage }: any) => {
+const ThemeProvider = ({ MainPage }: any) => {
   const darkMode = useDarkMode(false);
+
   return (
     <>
       <NavBar />
@@ -11,7 +12,7 @@ const ThemeProvider = ({ TargetPage }: any) => {
           darkMode.value ? "dark" : ""
         } text-foreground bg-background h-screen w-screen flex justify-center items-center flex-col`}
       >
-        {TargetPage}
+        {MainPage}
       </div>
     </>
   );

@@ -5,10 +5,11 @@ import { NextUIProvider } from "@nextui-org/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import IndexPage from "./pages/indexPage";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import ThemeProvider from "./components/themeProvider";
+import ThemeProvider from "./components/providers/themeProvider";
 import LoginPage from "./pages/auth/Login";
-import AuthProvider from "./components/AuthProvider";
+import AuthProvider from "./components/providers/AuthProvider";
 import RegisterPage from "./pages/auth/Register";
+import LoggedOutUserProvider from "./components/providers/NonAuthProvider";
 
 declare global {
   interface Window {
@@ -24,16 +25,24 @@ const router = createBrowserRouter([
     element: (
       <AuthProvider
         ProtectedPage={<ThemeProvider MainPage={<IndexPage />}></ThemeProvider>}
-      />
+      ></AuthProvider>
     ),
   },
   {
     path: "/auth/register",
-    element: <RegisterPage />,
+    element: (
+      <LoggedOutUserProvider>
+        <RegisterPage />
+      </LoggedOutUserProvider>
+    ),
   },
   {
     path: "/auth/login",
-    element: <LoginPage />,
+    element: (
+      <LoggedOutUserProvider>
+        <LoginPage />
+      </LoggedOutUserProvider>
+    ),
   },
 ]);
 
@@ -44,5 +53,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <RouterProvider router={router}></RouterProvider>
       </NextThemesProvider>
     </NextUIProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
