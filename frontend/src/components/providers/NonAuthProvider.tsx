@@ -7,10 +7,11 @@ const LoggedOutUserProvider = ({ Children }: any) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log(token);
     if (token) {
       setIsAuthenticated(true);
-      navigate("/"); // Redirect authenticated users to the main page
-    } else {
+      navigate("/");
+    } else if (token === null) {
       setIsAuthenticated(false);
     }
   }, [navigate]);
@@ -18,7 +19,9 @@ const LoggedOutUserProvider = ({ Children }: any) => {
   if (!isAuthenticated) {
     return <>{Children}</>;
   } else {
-    return null; // Render nothing for authenticated users
+    {
+      navigate("/auth/login");
+    }
   }
 };
 

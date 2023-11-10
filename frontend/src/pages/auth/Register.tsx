@@ -75,9 +75,8 @@ const RegisterPage = () => {
       data: data,
     };
     await axios.request(config).then(async (response) => {
-      localStorage.setItem("token", response.data.access_token);
-      localStorage.setItem("token", response.data.expiry);
-
+      localStorage.setItem("token", response.data.access_token.token);
+      localStorage.setItem("token", response.data.access_token.expiry);
       navigate("/");
     });
   };

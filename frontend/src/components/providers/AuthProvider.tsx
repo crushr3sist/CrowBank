@@ -8,11 +8,10 @@ const AuthProvider = ({ ProtectedPage }: any) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (
-      (location.pathname === "/auth/login" ||
-        location.pathname === "/auth/register") &&
-      token === null
-    ) {
+    if (token === null) {
+      navigate("/auth/login");
+      allowRender(false);
+    } else if (location.pathname === "/" && token === null) {
       navigate("/auth/login");
       allowRender(false);
     } else {

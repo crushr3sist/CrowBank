@@ -19,6 +19,7 @@ const LoginPage = () => {
     useRef(null),
     useRef(null),
   ];
+
   const authorizeCreds = () => {
     const config = {
       method: "get",
@@ -69,9 +70,8 @@ const LoginPage = () => {
         .request(config)
         .then((res) => {
           if (res.status === 200) {
-            localStorage.setItem("token", res.data.access_token);
-            localStorage.setItem("expire", res.data.expiry);
-
+            localStorage.setItem("token", res.data.access_token.token);
+            localStorage.setItem("expire", res.data.access_token.expire);
             navigator("/");
           } else {
             // cause error card
@@ -126,9 +126,7 @@ const LoginPage = () => {
         }
       }
     };
-
     document.addEventListener("keydown", handleKeyNavigation);
-
     return () => {
       document.removeEventListener("keydown", handleKeyNavigation);
     };
@@ -163,7 +161,12 @@ const LoginPage = () => {
                       setPassword(value);
                     }}
                   ></Input>
-                  <Button className="mt-2" onClick={() => loginPageHandler()}>
+                  <Button
+                    className="mt-2"
+                    onClick={() => {
+                      loginPageHandler();
+                    }}
+                  >
                     login
                   </Button>
                 </div>

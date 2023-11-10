@@ -8,19 +8,16 @@ import {
   NavbarContent,
   NavbarItem,
   Link,
-  Switch,
+  Button,
 } from "@nextui-org/react";
 
-import { MoonIcon } from "./icons/MoonIcon";
-import { SunIcon } from "./icons/SunIcon";
-
 import useDarkMode from "use-dark-mode";
+import { logOff } from "./logOff";
 
 export default function NavBar() {
   const menuItems = ["Dashboard", "digest"];
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
 
   const darkMode = useDarkMode(true);
   useEffect(() => {
@@ -68,15 +65,14 @@ export default function NavBar() {
       </NavbarContent>
 
       <NavbarItem>
-        <Switch
-          size="lg"
-          color="success"
-          isSelected={isSelected}
-          onValueChange={setIsSelected}
-          onChange={() => darkMode.toggle()}
-          endContent={<SunIcon />}
-          startContent={<MoonIcon />}
-        ></Switch>
+        <Button
+          variant="bordered"
+          onClick={() => {
+            logOff();
+          }}
+        >
+          Log Off
+        </Button>
       </NavbarItem>
 
       <NavbarMenu>
