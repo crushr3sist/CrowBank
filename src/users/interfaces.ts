@@ -5,6 +5,7 @@ interface IUser {
 	email: string;
 	firstName: string;
 	lastName: string;
+	address: string;
 }
 
 interface IAuth {
@@ -16,4 +17,5 @@ interface IRecord extends IAuth {
 	id: string;
 	email: string;
 }
+
 export { IUser, IAuth, IRecord };

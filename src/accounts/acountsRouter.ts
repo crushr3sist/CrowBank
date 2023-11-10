@@ -7,11 +7,6 @@ accountRouter.get("/", (req, res) => {
 });
 
 accountRouter.post("/create", (req, res) => {
-	/** user fills out a form in the frontend, and the backend creates a card record.
-	 * user's are only permitted 1 card for now
-	 *
-	 */
-
 	res.status(200);
 });
 

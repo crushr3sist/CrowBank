@@ -38,7 +38,6 @@ const LoginPage = () => {
       },
       data: { email: email, password: password },
     };
-    console.log(config);
     try {
       axios
         .request(config)

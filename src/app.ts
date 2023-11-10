@@ -32,10 +32,7 @@ app.use(
 	}),
 );
 
-app.use(
-	compression({ level: 6, strategy: zlib.constants.Z_BEST_COMPRESSION }),
-	compression({ level: 6, strategy: constants.Z_BEST_COMPRESSION }),
-);
+app.use(compression());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
