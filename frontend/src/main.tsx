@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { NextUIProvider } from "@nextui-org/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import IndexPage from "./pages/indexPage";
+import IndexPage from "./pages/dashboard/indexPage";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import LoginPage from "./pages/auth/Login";
 import AuthProvider from "./components/providers/AuthProvider";
