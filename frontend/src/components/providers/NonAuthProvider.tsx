@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../navbar";
 
 const LoggedOutUserProvider = ({ Children }: any) => {
   const navigate = useNavigate();
@@ -17,7 +18,12 @@ const LoggedOutUserProvider = ({ Children }: any) => {
   }, [navigate]);
 
   if (!isAuthenticated) {
-    return <>{Children}</>;
+    return (
+      <>
+        <NavBar />
+        {Children}
+      </>
+    );
   } else {
     {
       navigate("/auth/login");

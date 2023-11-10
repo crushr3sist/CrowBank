@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import NavBar from "../navbar";
 
 const AuthProvider = ({ ProtectedPage }: any) => {
   const navigate = useNavigate();
@@ -20,7 +21,12 @@ const AuthProvider = ({ ProtectedPage }: any) => {
   }, [location]);
 
   if (canRender) {
-    return <>{ProtectedPage}</>;
+    return (
+      <>
+        <NavBar />
+        {ProtectedPage}
+      </>
+    );
   } else {
     // You don't need to navigate here, just return null or any other component you want to render
     return null;

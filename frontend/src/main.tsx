@@ -5,7 +5,6 @@ import { NextUIProvider } from "@nextui-org/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import IndexPage from "./pages/indexPage";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import ThemeProvider from "./components/providers/themeProvider";
 import LoginPage from "./pages/auth/Login";
 import AuthProvider from "./components/providers/AuthProvider";
 import RegisterPage from "./pages/auth/Register";
@@ -22,11 +21,7 @@ window.global = globalThis;
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <AuthProvider
-        ProtectedPage={<ThemeProvider MainPage={<IndexPage />}></ThemeProvider>}
-      ></AuthProvider>
-    ),
+    element: <AuthProvider ProtectedPage={<IndexPage />}></AuthProvider>,
   },
   {
     path: "/auth/register",

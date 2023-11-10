@@ -11,7 +11,6 @@ import {
   Button,
 } from "@nextui-org/react";
 
-import useDarkMode from "use-dark-mode";
 import { logOff } from "./logOff";
 
 export default function NavBar() {
@@ -19,7 +18,6 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const darkMode = useDarkMode(true);
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -28,9 +26,7 @@ export default function NavBar() {
 
   return (
     <Navbar
-      className={`${
-        darkMode.value ? "dark" : ""
-      } text-foreground bg-background`}
+      className="dark text-foreground bg-background"
       isBordered
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
