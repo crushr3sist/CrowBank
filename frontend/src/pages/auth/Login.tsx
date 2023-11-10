@@ -19,7 +19,7 @@ const LoginPage = () => {
     useRef(null),
     useRef(null),
   ];
-  const authoriseCreds = () => {
+  const authorizeCreds = () => {
     const config = {
       method: "get",
       maxBodyLength: Infinity,
@@ -41,12 +41,12 @@ const LoginPage = () => {
         })
         .catch((err) => console.error(err));
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
   const loginPageHandler = () => {
-    authoriseCreds();
+    authorizeCreds();
     if (userFound) {
       onLoginPage(false);
     } else {
@@ -69,8 +69,9 @@ const LoginPage = () => {
         .request(config)
         .then((res) => {
           if (res.status === 200) {
-            console.log(res.data);
             localStorage.setItem("token", res.data.access_token);
+            localStorage.setItem("expire", res.data.expiry);
+
             navigator("/");
           } else {
             // cause error card
@@ -78,7 +79,7 @@ const LoginPage = () => {
         })
         .catch((err) => console.error(err));
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 

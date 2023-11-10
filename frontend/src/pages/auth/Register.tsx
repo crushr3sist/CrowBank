@@ -7,7 +7,6 @@ import {
   Button,
   Divider,
 } from "@nextui-org/react";
-import { motion } from "framer-motion";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -75,9 +74,10 @@ const RegisterPage = () => {
       },
       data: data,
     };
-    console.log(config);
     await axios.request(config).then(async (response) => {
       localStorage.setItem("token", response.data.access_token);
+      localStorage.setItem("token", response.data.expiry);
+
       navigate("/");
     });
   };

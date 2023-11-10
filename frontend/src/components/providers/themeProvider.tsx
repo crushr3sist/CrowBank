@@ -10,7 +10,7 @@ const ThemeProvider = ({ MainPage }: any) => {
       <div
         className={`${
           darkMode.value ? "dark" : ""
-        } text-foreground bg-background h-screen w-screen flex justify-center items-center flex-col`}
+        } text-foreground bg-background`}
       >
         {MainPage}
       </div>
@@ -19,3 +19,11 @@ const ThemeProvider = ({ MainPage }: any) => {
 };
 
 export default ThemeProvider;
+
+{
+  /* <div
+        className={`${
+          darkMode.value ? "dark" : ""
+        } text-foreground bg-background h-screen w-screen flex justify-center items-center flex-col`}
+      ></div> */
+}

@@ -104,15 +104,17 @@ export const createExpire = () => {
 	return expTime;
 };
 
-export const create_token = async (
-	user: IAuth,
-): Promise<string | undefined> => {
+export const create_token = async (user: IAuth) => {
+	const expireDelta = createExpire();
 	try {
 		const _user = await check_if_user_exists(user);
 		if (_user) {
-			return jwt.sign({ user: _user }, process.env.ACCESS_SECRET!, {
-				expiresIn: createExpire(),
-			});
+			return {
+				token: jwt.sign({ user: _user }, process.env.ACCESS_SECRET!, {
+					expiresIn: expireDelta,
+				}),
+				expire: expireDelta,
+			};
 		} else {
 			throw new Error("Invalid credentials");
 		}

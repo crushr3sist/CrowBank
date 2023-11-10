@@ -42,11 +42,11 @@ usersRouter.post("/login", async (req, res) => {
 		}
 		if (!(await getUserId(req.body))) {
 			console.log(req.body);
-			res.status(500).send(`Error during Authentication: User Doesnt Exist`);
+			res.status(500).send(`Error during Authentication: User doesn't Exist`);
 			return;
 		} else {
 			const token = await create_token(req.body);
-			res.status(200).send({ access_token: token });
+			res.status(200).send({ access_token: token.token, expiry: token.expire });
 		}
 	} catch (error) {
 		console.error("Error with login:", error.message);
@@ -70,9 +70,11 @@ usersRouter.post("/register", async (req, res) => {
 			console.log(user);
 			await db.prisma.$disconnect();
 			const token = await create_token(req.body);
-			res
-				.status(200)
-				.send({ message: "Registration successful", access_token: token });
+			res.status(200).send({
+				message: "Registration successful",
+				access_token: token.token,
+				expiry: token.expire,
+			});
 		}
 	} catch (error) {
 		console.error("Error during registration:", error.message);
@@ -81,7 +83,7 @@ usersRouter.post("/register", async (req, res) => {
 	}
 });
 
-usersRouter.get("/otp/mobile/generate", async (req, res) => {
+usersRouter.get("/otp/mobile/generate", async (_req, res) => {
 	const secretKey = speakeasy.generateSecret();
 
 	const url = speakeasy.otpauthURL({
@@ -92,7 +94,7 @@ usersRouter.get("/otp/mobile/generate", async (req, res) => {
 	});
 
 	// @ts-ignore
-	QRCode.toDataURL(url, (err, data_url) => {
+	QRCode.toDataURL(url, (_err, data_url) => {
 		res
 			.status(200)
 			.send({ secretKey: secretKey.base32, otp_qr_code: data_url });
@@ -108,7 +110,7 @@ usersRouter.get("/check", async (req, res) => {
 		}
 		if (!(await getUserId(req.body))) {
 			console.log(req.body);
-			res.status(500).send(`Error during check: wrong credidentials`);
+			res.status(500).send(`Error during check: wrong credentials`);
 			return;
 		} else {
 			res.status(200).send("user found");
