@@ -1,6 +1,7 @@
 import express from "express";
 import { IAuth, IUser } from "./interfaces";
 import db from "../db";
+
 import speakeasy from "speakeasy";
 import QRCode from "qrcode";
 import { getUserId, register } from "./register";
@@ -11,6 +12,7 @@ import {
 	check_if_user_exists,
 	verifyOTP,
 } from "./authentication";
+
 const usersRouter = express.Router();
 
 usersRouter.post("/refresh", async (req, res) => {
@@ -82,7 +84,6 @@ usersRouter.post("/register", async (req, res) => {
 		res.status(500).send(`Error during registration ${error.message}`);
 	}
 });
-
 usersRouter.get("/otp/mobile/generate", async (_req, res) => {
 	const secretKey = speakeasy.generateSecret();
 

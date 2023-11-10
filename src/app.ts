@@ -12,6 +12,7 @@ import creditRouter from "./accounts/credit/creditRouter";
 import debitRouter from "./accounts/debit/debitRouter";
 import incidentsRouter from "./accounts/incidences/incidentRouter";
 import dashboardRouter from "./accounts/mainInterface/dashboardRouter";
+import mobileOTP from "./users/mobileOTPRoutes";
 
 dontenv.config();
 
@@ -36,12 +37,10 @@ app.use(compression());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/accounts/credit", creditRouter);
-app.use("/accounts/debit", debitRouter);
 app.use("/incidents", incidentsRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/accounts", accountRouter);
-app.use("/users", usersRouter);
+app.use("/users", usersRouter, mobileOTP);
 
 app.listen(PORT, () => {
 	console.log(`Listening on port ${PORT}`);

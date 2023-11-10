@@ -1,25 +1,40 @@
 import express from "express";
+import { Router, Request, Response } from "express";
 
-const accountRouter = express.Router();
+import { verifyToken } from "../middlewares/tokenMiddleware";
+import { JwtPayload } from "jsonwebtoken";
 
-accountRouter.get("/", (req, res) => {
-	res.status(200);
+const accountRouter: Router = express.Router();
+
+accountRouter.use(verifyToken);
+
+accountRouter.get("/", (req: Request, res: Response) => {
+	const decoded: JwtPayload = (req as any).decoded;
+
+	res.status(200).send(decoded);
 });
 
 accountRouter.post("/create", (req, res) => {
-	res.status(200);
+	const token = req.body.token;
+	res.status(200).sendStatus(200);
 });
 
 accountRouter.post("/fetch", (req, res) => {
-	res.status(200);
+	const token = req.body.token;
+
+	res.status(200).sendStatus(200);
 });
 
 accountRouter.delete("/cancel", (req, res) => {
-	res.status(200);
+	const token = req.body.token;
+
+	res.status(200).sendStatus(200);
 });
 
 accountRouter.post("/account/statement", (req, res) => {
-	res.status(200);
+	const token = req.body.token;
+
+	res.status(200).sendStatus(200);
 });
 
 export default accountRouter;
