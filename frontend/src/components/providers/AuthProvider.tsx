@@ -22,10 +22,10 @@ const AuthProvider = ({ ProtectedPage }: any) => {
 
   if (canRender) {
     return (
-      <>
+      <div className="bg-gradient-to-r from-[#8a7947] to-[#c4c493]">
         <NavBar />
         {ProtectedPage}
-      </>
+      </div>
     );
   } else {
     // You don't need to navigate here, just return null or any other component you want to render

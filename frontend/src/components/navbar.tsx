@@ -26,7 +26,7 @@ export default function NavBar() {
 
   return (
     <Navbar
-      className="dark text-foreground bg-background"
+      className="bg-background"
       isBordered
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
@@ -41,7 +41,7 @@ export default function NavBar() {
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
           <p className="font-bold text-inherit">
-            <a href={"/"}>Homely</a>
+            <a href={"/"}>CrowBank</a>
           </p>
         </NavbarBrand>
       </NavbarContent>
@@ -49,20 +49,25 @@ export default function NavBar() {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
           <p className="font-bold text-inherit">
-            <a href={"/"}>Homely</a>
+            <a href={"/"}>CrowBank</a>
           </p>
         </NavbarBrand>
         <NavbarItem isActive>
-          <Link href="#">shows</Link>
+          <Link style={{ color: "#F7B750" }} href="#">
+            Statements
+          </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="#">movies</Link>
+          <Link style={{ color: "#F7B750" }} href="#">
+            Accounts
+          </Link>
         </NavbarItem>
       </NavbarContent>
 
       <NavbarItem>
         <Button
           variant="bordered"
+          color="danger"
           onClick={() => {
             logOff();
           }}
@@ -76,14 +81,8 @@ export default function NavBar() {
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
               className="w-full"
-              color={
-                index === 2
-                  ? "warning"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              href={index === 1 ? "/digest" : "/"}
+              style={{ color: "#F7B750" }}
+              href={index === 1 ? "/transactions" : "/accounts"}
               size="lg"
             >
               {item}

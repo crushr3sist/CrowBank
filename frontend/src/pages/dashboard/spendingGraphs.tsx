@@ -106,7 +106,7 @@ function SpendingChart() {
           </div>
           <div>
             <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex}>
-              <TabList color="gray" variant="solid">
+              <TabList color="amber" variant="line">
                 <Tab>Spending</Tab>
                 <Tab>Income</Tab>
               </TabList>
@@ -115,11 +115,12 @@ function SpendingChart() {
         </div>
         {/* web */}
         <div className="mt-8 hidden sm:block">
-          <AreaChart {...areaChartArgs} />
+          <AreaChart colors={["amber"]} {...areaChartArgs} />
         </div>
         {/* mobile */}
         <div className="mt-8 sm:hidden">
           <AreaChart
+            color="fuchsia"
             {...areaChartArgs}
             startEndOnly={true}
             showGradient={false}
