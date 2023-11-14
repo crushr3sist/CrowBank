@@ -24,7 +24,7 @@ model MobileOTPSecret {
 
 model Account {
   id           Int           @id @default(autoincrement()) // Use auto-incremented integer
-  userId       String        @unique // Use a more descriptive name
+  userId       String
   debitCards   Debit[]
   creditCards  Credit[]
   transactions Transaction[]
@@ -49,7 +49,7 @@ model Debit {
 
   // Use a more descriptive name for the relation
   account   Account? @relation(fields: [accountId], references: [id])
-  accountId Int?
+  accountId Int?     @unique
 }
 
 model Credit {

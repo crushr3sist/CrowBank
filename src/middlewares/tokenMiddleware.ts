@@ -14,9 +14,10 @@ export async function verifyToken(
 	}
 
 	try {
-		// Attach the decoded information to the request
 		const decoded: string | JwtPayload | undefined = await get_user(token);
+
 		(req as any).decoded = decoded;
+
 		next();
 	} catch (error) {
 		return res.status(401).json({ message: "Token is invalid." });

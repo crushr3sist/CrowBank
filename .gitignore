@@ -4,5 +4,4 @@ node_modules
 build
 dist
 .vscode
-prisma/migrations
 client_dev

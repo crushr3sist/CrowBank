@@ -3,37 +3,55 @@ import { Router, Request, Response } from "express";
 
 import { verifyToken } from "../middlewares/tokenMiddleware";
 import { JwtPayload } from "jsonwebtoken";
-
+import CardService from "./accounts";
+import { AccountService } from "./accountService";
 const accountRouter: Router = express.Router();
 
 accountRouter.use(verifyToken);
 
-accountRouter.get("/", (req: Request, res: Response) => {
-	const decoded: JwtPayload = (req as any).decoded;
-
-	res.status(200).send(decoded);
+accountRouter.post("/create", async (req: Request, res: Response) => {
+	try {
+		const user = await (req as any).decoded;
+		const newDebit = new CardService();
+		const newDebitCard = await newDebit.createDebitCard(
+			user.user.id,
+			req.body.atmPin,
+		);
+		res.status(200).send({ cardData: newDebitCard });
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: `error occurred ${err}` }).sendDate;
+	}
 });
 
-accountRouter.post("/create", (req, res) => {
-	const token = req.body.token;
-	res.status(200).sendStatus(200);
+accountRouter.get("/fetch", async (req: Request, res: Response) => {
+	const user: JwtPayload = (req as any).decoded;
+	const debitCards = await AccountService.getDebitCards(user.user.id);
+	res.status(200).send({ "debit cards": debitCards });
 });
 
-accountRouter.post("/fetch", (req, res) => {
-	const token = req.body.token;
+accountRouter.delete("/cancel", async (req: Request, res: Response) => {
+	try {
+		const user: JwtPayload = (req as any).decoded;
+		const debitCardId: number = parseInt(req.body.debitCardId);
 
-	res.status(200).sendStatus(200);
+		if (!debitCardId) {
+			throw new Error("Debit card ID is required in the request body");
+		}
+
+		await CardService.cancelDebitCard(user.user.id, debitCardId);
+
+		res.status(200).send({
+			message: "Debit card and associated account canceled successfully",
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: `Error occurred: ${err.message || err}` });
+	}
 });
 
-accountRouter.delete("/cancel", (req, res) => {
-	const token = req.body.token;
-
-	res.status(200).sendStatus(200);
-});
-
-accountRouter.post("/account/statement", (req, res) => {
-	const token = req.body.token;
-
+accountRouter.post("/account/statement", (req: Request, res: Response) => {
+	const user: JwtPayload = (req as any).decoded;
 	res.status(200).sendStatus(200);
 });
 
