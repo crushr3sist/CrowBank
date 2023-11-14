@@ -1,4 +1,4 @@
-export interface DebitCard {
+export interface IDebitCard {
 	id: number;
 	userId: string;
 	ATMPin: string;
@@ -11,8 +11,4 @@ export interface DebitCard {
 	balance: number;
 	savings: number;
 	accountId: number;
-}
-
-export interface DebitCardsState {
-	debitCards: DebitCard[];
 }

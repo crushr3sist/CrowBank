@@ -1,7 +1,5 @@
 import savingsCard from "./savingsCard";
 import checkingCard from "./checkingCard";
-import SpendingChart from "./spendingGraphs";
-import { Card } from "@tremor/react";
 import TransferCard from "./transferCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -9,8 +7,8 @@ import { IDebitCard } from "./interfaces";
 import { Spinner } from "@nextui-org/react";
 
 const IndexPage = () => {
-  const [fetchedData, setFetchedData] = useState<IDebitCard>();
-  const [fetched, setFetched] = useState(false);
+  const [fetchedData, setFetchedData] = useState<IDebitCard | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchAccountData = async () => {
     try {
@@ -22,34 +20,35 @@ const IndexPage = () => {
         },
       });
       setFetchedData(response.data);
-      setFetched(true);
     } catch (error) {
       console.error("Error fetching account data:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    (async () => await fetchAccountData())();
+    fetchAccountData();
   }, []);
 
   return (
     <div className="h-screen flex flex-col">
-      {fetched ? (
+      {loading ? (
+        <div className="h-screen flex items-center justify-center">
+          <Spinner />
+          <p>Your data is loading</p>
+        </div>
+      ) : (
         <div className="flex-1 flex ml-2 mr-2 -mb-40">
           <div className="w-1/2 p-2">
             {savingsCard(fetchedData)}
             {checkingCard(fetchedData)}
           </div>
-          <div className="w-1/2 p-2 ">
+          <div className="w-1/2 p-2">
             <div className="h-full flex-col flex-grow">
-              {TransferCard(fetchedData)}
+              <TransferCard />
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="h-screen flex flex-col items-center justify-center">
-          <Spinner />
-          <p>your data is loading</p>
         </div>
       )}
     </div>
@@ -57,7 +56,3 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
-
-{
-  /* <div className="flex-1 p-2 -mb-1">{SpendingChart()}</div> */
-}

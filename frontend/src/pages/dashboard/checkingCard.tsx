@@ -12,6 +12,7 @@ const checkingCard = (debitData) => {
     }
     return formattedNumber;
   }
+
   return (
     <div>
       <Card className="w-full min-w-xs mx-auto mt-4">
