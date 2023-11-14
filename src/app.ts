@@ -5,15 +5,12 @@ import helmet from "helmet";
 import bodyParser from "body-parser";
 import usersRouter from "./users/usersRouter";
 import compression from "compression";
-import { constants } from "zlib";
-import * as zlib from "zlib";
-import accountRouter from "./accounts/acountsRouter";
-import creditRouter from "./accounts/credit/creditRouter";
-import debitRouter from "./accounts/debit/debitRouter";
+import accountRouter from "./accounts/accountsRouter";
 import incidentsRouter from "./accounts/incidences/incidentRouter";
 import dashboardRouter from "./accounts/mainInterface/dashboardRouter";
 import mobileOTP from "./users/mobileOTPRoutes";
-
+import morgan from "morgan";
+import debitRouter from "./accounts/debit/debitRouter";
 dontenv.config();
 
 const PORT = 8000;
@@ -35,11 +32,12 @@ app.use(
 
 app.use(compression());
 app.use(express.json());
+app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use("/incidents", incidentsRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/accounts", accountRouter);
+app.use("/debit", debitRouter);
 app.use("/users", usersRouter, mobileOTP);
 
 app.listen(PORT, () => {

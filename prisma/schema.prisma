@@ -23,71 +23,63 @@ model MobileOTPSecret {
 }
 
 model Account {
-  id           Int           @id @default(autoincrement()) // Use auto-incremented integer
+  id           Int           @id @default(autoincrement())
   userId       String
   debitCards   Debit[]
   creditCards  Credit[]
   transactions Transaction[]
+  incidences   Incidence[]
 
-  // Use a more meaningful name for the relation
   user User? @relation(fields: [userId], references: [id])
 }
 
 model Debit {
-  id             Int         @id @default(autoincrement())
-  userId         String      @unique // Use a more descriptive name
-  ATMPin         String      @unique
-  CardNumber     String      @unique
-  CVV            String      @unique
+  id             Int    @id @default(autoincrement())
+  userId         String @unique
+  ATMPin         String @unique
+  CardNumber     String @unique
+  CVV            String @unique
   CardType       String
   CardIssuedDate String
   CardExpiryDate String
   CardHolderName String
   balance        Float
   savings        Float
-  incidences     Incidence[]
 
-  // Use a more descriptive name for the relation
   account   Account? @relation(fields: [accountId], references: [id])
   accountId Int?     @unique
 }
 
 model Credit {
-  id           Int         @id @default(autoincrement())
-  userId       String      @unique // Use a more descriptive name
-  pin          String      @unique
-  cardNumber   String      @unique
-  cvv          String      @unique
+  id           Int    @id @default(autoincrement())
+  userId       String @unique
+  pin          String @unique
+  cardNumber   String @unique
+  cvv          String @unique
   deposit      Float
   balanceInUse Float
-  incidences   Incidence[]
 
-  // Use a more descriptive name for the relation
   account   Account? @relation(fields: [accountId], references: [id])
   accountId Int?
 }
 
 model Incidence {
-  id              String @id @default(uuid()) // Use a more descriptive name and UUID
-  creditId        Int? // Use a more descriptive name
-  debitId         Int? // Use a more descriptive name
+  id              String @id @default(uuid())
+  accountId       Int?
   message         String
   dateOfIncidence String
 
-  // Use more descriptive names for relations
-  credit Credit? @relation(fields: [creditId], references: [id])
-  debit  Debit?  @relation(fields: [debitId], references: [id])
+  account Account? @relation(fields: [accountId], references: [id])
 }
 
 model Transaction {
-  id                String @id @default(uuid()) // Use a more descriptive name and UUID
+  id                String @id @default(uuid())
   amountTransacted  Float
   senderId          Int?
   receiver          String
   dateOfTransaction String
   feesApplied       Float
 
-  // Use more descriptive names for relations
   sender Account? @relation(fields: [senderId], references: [id])
 }
 
@@ -97,5 +89,5 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // uses connection pooling
+  url      = env("DATABASE_URL")
 }

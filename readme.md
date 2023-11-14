@@ -12,11 +12,12 @@
 
 # Database Structure
 
-<img src="https://i.imgur.com/WSUaXLY.png">
+<img src="https://i.imgur.com/JBM44ms.png">
 
 # what's left to implement
 
-- get data from user's account
-- populate the data from user to the cards
-- write the transaction schema
-- finish the transaction endpoints
+- [ ] implement the gateway worker https://github.com/ExpressGateway/express-gateway
+- [x] get data from user's account
+- [x] populate the data from user to the cards
+- [ ] write the transaction schema
+- [ ] finish the transaction endpoints

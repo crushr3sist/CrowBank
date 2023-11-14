@@ -34,25 +34,65 @@ usersRouter.post("/", async (req, res) => {
 		res.status(500).send(`Error fetching user ${error.message}`);
 	}
 });
-
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: User login
+ *     description: Authenticate a user and generate an access token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: './interfaces/IAuth'
+ *     responses:
+ *       200:
+ *         description: Successful authentication
+ *         content:
+ *           application/json:
+ *             example:
+ *               access_token: "your_access_token_here"
+ *               expiry: "token_expiry_datetime_here"
+ *       500:
+ *         description: Error during authentication or incorrect data sent
+ *         content:
+ *           text/plain:
+ *             example: "Error during Authentication: User doesn't Exist"
+ */
 usersRouter.post("/login", async (req, res) => {
 	try {
+		/**
+		 * Check if the request body contains valid authentication data.
+		 * @type {IAuth}
+		 */
 		if (!(req.body as IAuth)) {
 			console.log(req.body);
 			res.status(500).send(`Error during registration: incorrect data sent`);
 			return;
 		}
+		/**
+		 * Check if the user exists and retrieve their user ID.
+		 * @type {string}
+		 */
 		if (!(await getUserId(req.body))) {
 			console.log(req.body);
 			res.status(500).send(`Error during Authentication: User doesn't Exist`);
 			return;
 		} else {
+			/**
+			 * Generate an access token for the authenticated user.
+			 * @type {{ token: string, expire: string }}
+			 */
 			const token = await create_token(req.body);
 			res.status(200).send({ access_token: token.token, expiry: token.expire });
 		}
 	} catch (error) {
 		console.error("Error with login:", error.message);
 		res.status(500).send(`Error with login ${error.message}`);
+		/**
+		 * Respond with the generated access token and its expiry.
+		 */
 	}
 });
 

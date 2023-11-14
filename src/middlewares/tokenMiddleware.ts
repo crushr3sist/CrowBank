@@ -7,10 +7,20 @@ export async function verifyToken(
 	res: Response,
 	next: NextFunction,
 ) {
-	const token: string | undefined = req.body.token;
+	const authorizationHeader = req.headers.authorization;
+
+	if (!authorizationHeader) {
+		return res
+			.status(401)
+			.json({ message: "Authorization header is missing." });
+	}
+
+	const token = authorizationHeader.split(" ")[1];
 
 	if (!token) {
-		return res.status(401).json({ message: "Token is missing." });
+		return res
+			.status(401)
+			.json({ message: "Token is missing from Authorization header." });
 	}
 
 	try {
