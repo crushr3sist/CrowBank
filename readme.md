@@ -19,5 +19,7 @@
 - [ ] implement the gateway worker https://github.com/ExpressGateway/express-gateway
 - [x] get data from user's account
 - [x] populate the data from user to the cards
+- [ ] write a internal balance api
+- [ ] write a internal transfer div
 - [ ] write the transaction schema
 - [ ] finish the transaction endpoints
