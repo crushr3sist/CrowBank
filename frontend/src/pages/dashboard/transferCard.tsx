@@ -8,7 +8,7 @@ import {
   DropdownItem,
   DropdownSection,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const TransferCard = () => {
   const accountOptions = ["Savings", "Balance", "Investment"];
@@ -38,6 +38,22 @@ const TransferCard = () => {
     );
   };
 
+  // Update the selected value when fromAccount changes
+  useEffect(() => {
+    const trigger = document.getElementById("fromAccountTrigger");
+    if (trigger) {
+      trigger.value = fromAccount;
+    }
+  }, [fromAccount]);
+
+  // Update the selected value when toAccount changes
+  useEffect(() => {
+    const trigger = document.getElementById("toAccountTrigger");
+    if (trigger) {
+      trigger.value = toAccount;
+    }
+  }, [toAccount]);
+
   return (
     <div>
       <Card className="w-full min-w-xs mx-auto mt-4 h-full">
@@ -48,23 +64,27 @@ const TransferCard = () => {
           classNames={{
             base: "before:bg-default-200",
             content:
-              "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
+              "w-full py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
           }}
-          onSelect={handleFromAccountChange}
-          value={fromAccount}
         >
           <DropdownTrigger>
-            <Button variant="bordered">
-              {fromAccount || "Select an account"}
-            </Button>
+            <Input
+              id="fromAccountTrigger"
+              placeholder="Select an account"
+              readOnly
+              onClick={() => setAvailableToAccounts(accountOptions)}
+            />
           </DropdownTrigger>
           <DropdownMenu
             variant="faded"
             aria-label="Dropdown menu with description"
           >
             <DropdownSection title="Accounts">
-              {accountOptions.map((option) => (
-                <DropdownItem key={option} value={option}>
+              {availableToAccounts.map((option) => (
+                <DropdownItem
+                  key={option}
+                  onClick={() => handleFromAccountChange(option)}
+                >
                   {option}
                 </DropdownItem>
               ))}
@@ -80,13 +100,18 @@ const TransferCard = () => {
             content:
               "w-full py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
           }}
-          onSelect={handleToAccountChange}
-          value={toAccount}
         >
           <DropdownTrigger>
-            <Button variant="bordered">
-              {toAccount || "Select an account"}
-            </Button>
+            <Input
+              id="toAccountTrigger"
+              placeholder="Select an account"
+              readOnly
+              onClick={() =>
+                setAvailableToAccounts(
+                  accountOptions.filter((option) => option !== fromAccount)
+                )
+              }
+            />
           </DropdownTrigger>
           <DropdownMenu
             variant="faded"
@@ -94,7 +119,10 @@ const TransferCard = () => {
           >
             <DropdownSection title="Accounts">
               {availableToAccounts.map((option) => (
-                <DropdownItem key={option} value={option}>
+                <DropdownItem
+                  key={option}
+                  onClick={() => handleToAccountChange(option)}
+                >
                   {option}
                 </DropdownItem>
               ))}
@@ -108,8 +136,6 @@ const TransferCard = () => {
         <Button onClick={handleTransfer} disabled={!fromAccount || !toAccount}>
           Transfer
         </Button>
-        {fromAccount}
-        {toAccount}
       </Card>
     </div>
   );
