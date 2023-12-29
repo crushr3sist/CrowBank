@@ -35,6 +35,18 @@ accountRouter.get("/fetch", async (req: Request, res: Response) => {
 	}
 });
 
+accountRouter.get("/count", async (req: Request, res: Response) => {
+	try {
+		const user = await (req as any).decoded;
+		const debitCards = await AccountService.getDebitCards(user.user.id);
+		if (debitCards) {
+			res.status(200).send(debitCards.length);
+		}
+	} catch (e) {
+		res.status(200).send({ count: 0 });
+	}
+});
+
 accountRouter.delete("/cancel", async (req: Request, res: Response) => {
 	try {
 		const user: JwtPayload = (req as any).decoded;

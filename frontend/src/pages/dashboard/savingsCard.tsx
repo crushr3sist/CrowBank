@@ -1,6 +1,4 @@
 import { Card, Flex, Metric, Text } from "@tremor/react";
-import { IDebitCard } from "./interfaces";
-import { card } from "@nextui-org/react";
 
 const savingsCard = (debitData) => {
   function cardNumberFormatter(cardNumber: string): string {
@@ -16,15 +14,26 @@ const savingsCard = (debitData) => {
     return formattedNumber;
   }
 
+  // Check if debitData[0] is defined
+  if (!debitData || !debitData[0]) {
+    return <></>; // or you can render a default component when data is not available
+  }
+
   return (
     <div>
-      <Card className="w-full min-w-xs mx-auto mt-4">
-        <h1>Savings</h1>
-        <Metric>Available: ${debitData[0].savings}</Metric>
-        <Flex className="mt-4">
-          <Text>{cardNumberFormatter(debitData[0].CardNumber)}</Text>
-        </Flex>
-      </Card>
+      {debitData !== 0 ? (
+        <>
+          <Card className="w-full min-w-xs mx-auto mt-4">
+            <h1>Savings</h1>
+            <Metric>Available: ${debitData[0].savings || 0}</Metric>
+            <Flex className="mt-4">
+              <Text>{cardNumberFormatter(debitData[0].CardNumber) || 0}</Text>
+            </Flex>
+          </Card>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
